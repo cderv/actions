@@ -31,5 +31,10 @@ runs:
         export download_url=$GITHUB_API_URL/repos/jgm/pandoc/actions/artifacts/$artifact_id/zip
         echo "::set-output name=artifact::$(echo $output | jq -r 'setpath(["artifacts"]; env.download_url)')"
       shell: bash
-    - run: echo ${{ steps.get-artifact.outputs.artifact }} | jq .
+    - name: Download and unzip Pandoc
+      run: |
+        curl -L -o pandoc.zip $(echo ${{ steps.get-artifact.outputs.artifact }} | jq -r .artifacts)
+        unzip -j -d ${{ inputs.directory }} pandoc.zip
+        [ ${{runner.os}} = "linux" ] && chmod +x ~/bin/pandoc
+        ~/bin/pandoc --version
       shell: bash
