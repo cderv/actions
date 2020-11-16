@@ -44,6 +44,7 @@ runs:
       run: |
         echo ${{ steps.get-artifact.outputs.artifact }}
         curl -L -o pandoc.zip -H "Authorization: token $GH_TOKEN" ${{ steps.get-artifact.outputs.artifact }}
+        sleep 10
         ls .
         unzip -j -d ${{ inputs.directory }} pandoc.zip
         [ ${{ inputs.os }} = "linux" ] && chmod +x ~/bin/pandoc
