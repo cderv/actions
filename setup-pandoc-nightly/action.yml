@@ -43,7 +43,7 @@ runs:
     - name: Download and unzip Pandoc
       run: |
         echo ${{ steps.get-artifact.outputs.artifact }}
-        curl -L -o pandoc.zip $(echo ${{ steps.get-artifact.outputs.artifact }} | jq -r .artifacts)
+        curl -L -o pandoc.zip ${{ steps.get-artifact.outputs.artifact }}
         unzip -j -d ${{ inputs.directory }} pandoc.zip
         [ ${{runner.os}} = "linux" ] && chmod +x ~/bin/pandoc
         ~/bin/pandoc --version
