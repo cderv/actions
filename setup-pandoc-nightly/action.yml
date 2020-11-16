@@ -28,8 +28,8 @@ runs:
         res=$(curl -H "Authorization: token $GH_TOKEN" $GITHUB_API_URL/repos/jgm/pandoc/actions/workflows/nightly.yml/runs?status="success")
         output=$(echo $res | jq -r '.workflow_runs | .[0] | {sha: .head_sha, runs_url: .html_url, artifacts: .artifacts_url, date: .updated_at}')
         artifact_id=$(curl -H "Authorization: token $GH_TOKEN" $(echo $output | jq -r .artifacts) | jq -r '.artifacts | map(select(.name == "nightly-linux")) | .[0].id')
-        dowload_url=$GITHUB_API_URL/repos/jgm/pandoc/actions/artifacts/$artifact_id/zip
+        download_url=$GITHUB_API_URL/repos/jgm/pandoc/actions/artifacts/$artifact_id/zip
         echo "::set-output name=artifact::$(echo $output | jq -r 'setpath(["artifacts"]; env.download_url)')"
       shell: bash
-    - run: echo ${{ steps.get-artifact.outputs.artifact }} 
+    - run: echo ${{ steps.get-artifact.outputs.artifact }} | jq .
       shell: bash
