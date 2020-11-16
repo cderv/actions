@@ -29,7 +29,7 @@ runs:
         output=$(echo $res | jq -r '.workflow_runs | .[0] | {sha: .head_sha, runs_url: .html_url, artifacts: .artifacts_url, date: .updated_at}')
         artifact_id=$(curl -H "Authorization: token $GH_TOKEN" $(echo $output | jq -r .artifacts) | jq -r '.artifacts | map(select(.name == "nightly-linux")) | .[0].id')
         export download_url=$GITHUB_API_URL/repos/jgm/pandoc/actions/artifacts/$artifact_id/zip
-        echo "::set-output name=artifact::$(echo $output | jq -r 'setpath(["artifacts"]; env.download_url)')"
+        echo "::set-output name=artifact::$(echo $output | jq -r -c 'setpath(["artifacts"]; env.download_url)')"
       shell: bash
     - name: Download and unzip Pandoc
       run: |
