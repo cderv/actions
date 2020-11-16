@@ -40,7 +40,7 @@ runs:
         echo "::set-output name=commit::$(echo $output | jq '.sha')"
         echo "::set-output name=when::$(echo $output | jq '.date')"
       shell: bash
-    - name: Download and unzip Pandoc
+    - name: Download and unoszip Pandoc
       env:
         GH_TOKEN: ${{ github.token }}
       run: |
@@ -50,4 +50,5 @@ runs:
         [ ${{ inputs.os }} = "linux" ] && chmod +x ${{ inputs.directory }}/pandoc
         ${{ inputs.directory }}/pandoc --version
         echo "{PATH}={${{ inputs.directory }}}" >> $GITHUB_ENV
+        ls ${{ inputs.directory }}
       shell: bash
