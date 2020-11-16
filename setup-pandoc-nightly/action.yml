@@ -8,7 +8,7 @@ inputs:
   directory:  # id of input
     description: 'where to install'
     required: true
-    default: $GITHUB_WORKSPACE/bin
+    default: $HOME/bin
   
 outputs:
   pandoc-version: 
