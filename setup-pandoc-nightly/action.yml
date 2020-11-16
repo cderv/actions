@@ -16,7 +16,13 @@ outputs:
     value: ${{ steps.pandoc-version.outputs.version }}
   commit: 
     description: "Built from this commit"
-    value: ${{ steps.pandoc.outputs.commit }}
+    value: ${{ steps.get-artifact.outputs.commit }}
+  run-url: 
+    description: "Url of the run for the Pandoc nightly build"
+    value: ${{ steps.get-artifact.outputs.run-url }}
+  when: 
+    description: "datetime of the nighlty build"
+    value: ${{ steps.get-artifact.outputs.when }}
 runs:
   using: "composite"
   steps: 
@@ -28,9 +34,11 @@ runs:
         res=$(curl -H "Authorization: token $GH_TOKEN" $GITHUB_API_URL/repos/jgm/pandoc/actions/workflows/nightly.yml/runs?status="success")
         output=$(echo $res | jq -r '.workflow_runs | .[0] | {sha: .head_sha, runs_url: .html_url, artifacts: .artifacts_url, date: .updated_at}')
         artifact_id=$(curl -H "Authorization: token $GH_TOKEN" $(echo $output | jq -r .artifacts) | jq -r '.artifacts | map(select(.name == "nightly-linux")) | .[0].id')
-        export download_url=$GITHUB_API_URL/repos/jgm/pandoc/actions/artifacts/$artifact_id/zip
-        out=$(echo $output | jq -c 'setpath(["artifacts"]; env.download_url)')
-        echo "::set-output name=artifact::$(echo $out)"
+        download_url=$GITHUB_API_URL/repos/jgm/pandoc/actions/artifacts/$artifact_id/zip
+        echo "::set-output name=artifact::$(echo $download_url)"
+        echo "::set-output name=run-url::$(echo $output | jq '.runs_url')"
+        echo "::set-output name=commit::$(echo $output | jq '.sha')"
+        echo "::set-output name=when::$(echo $output | jq '.date')"
       shell: bash
     - name: Download and unzip Pandoc
       run: |
