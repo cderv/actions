@@ -45,6 +45,6 @@ runs:
         echo ${{ steps.get-artifact.outputs.artifact }}
         curl -L -o pandoc.zip ${{ steps.get-artifact.outputs.artifact }}
         unzip -j -d ${{ inputs.directory }} pandoc.zip
-        [ ${{runner.os}} = "linux" ] && chmod +x ~/bin/pandoc
+        [ ${{ inputs.os }} = "linux" ] && chmod +x ~/bin/pandoc
         ~/bin/pandoc --version
       shell: bash
