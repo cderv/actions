@@ -1,0 +1,35 @@
+name: 'Setup Pandoc Nightly'
+description: 'Install last dev Pandoc version built'
+inputs:
+  os:  # id of input
+    description: 'Which OS binary to choose'
+    required: true
+    default: 'linux'
+  directory:  # id of input
+    description: 'where to install'
+    required: true
+    default: '~/bin'
+  
+outputs:
+  pandoc-version: 
+    description: "Pandoc Version"
+    value: ${{ steps.pandoc-version.outputs.version }}
+  commit: 
+    description: "Built from this commit"
+    value: ${{ steps.pandoc.outputs.commit }}
+runs:
+  using: "composite"
+  steps: 
+    - name: Last Nightly run
+      id: get-artifact
+      env:
+        GH_TOKEN: ${{ github.token }}
+      run: | 
+        res=$(curl -H "Authorization: token $GH_TOKEN" $GITHUB_API_URL/repos/jgm/pandoc/actions/workflows/nightly.yml/runs?status="success")
+        output=$(echo $res | jq -r '.workflow_runs | .[0] | {sha: .head_sha, runs_url: .html_url, artifacts: .artifacts_url, date: .updated_at}')
+        artifact_id=$(curl -H "Authorization: token $GH_TOKEN" $(echo $output | jq -r .artifacts) | jq -r '.artifacts | map(select(.name == "nightly-linux")) | .[0].id')
+        dowload_url=$GITHUB_API_URL/repos/jgm/pandoc/actions/artifacts/$artifact_id/zip
+        echo "::set-output name=artifact::$(echo $output | jq -r 'setpath(["artifacts"]; env.download_url)')"
+      shell: bash
+    - run: echo ${{ steps.get-artifact.outputs.artifact }} 
+      shell: bash
