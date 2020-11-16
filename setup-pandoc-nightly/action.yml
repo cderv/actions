@@ -49,6 +49,6 @@ runs:
         unzip -j -d ${{ inputs.directory }} pandoc.zip
         [ ${{ inputs.os }} = "linux" ] && chmod +x ${{ inputs.directory }}/pandoc
         ${{ inputs.directory }}/pandoc --version
-        echo "{PATH}={${{ inputs.directory }}}" >> $GITHUB_ENV
+        echo "${{ inputs.directory }}" >> $GITHUB_PATH
         ls ${{ inputs.directory }}
       shell: bash
