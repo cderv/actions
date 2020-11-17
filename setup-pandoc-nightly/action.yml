@@ -1,10 +1,6 @@
 name: 'Setup Pandoc Nightly'
 description: 'Install last dev Pandoc version built'
 inputs:
-  os:  # id of input
-    description: 'Which OS binary to choose'
-    required: true
-    default: 'linux'
   directory:  # id of input
     description: 'where to install'
     required: true
@@ -26,6 +22,19 @@ outputs:
 runs:
   using: "composite"
   steps: 
+    - name: Select binary for OS
+      run: |
+         if ["$RUNNER_OS" == "Linux"]; then
+              echo "BIN_NAME=nightly-linux" >> $GITHUB_ENV
+         elif ["$RUNNER_OS" == "macOS"]; then
+              echo "BIN_NAME=nightly-macos" >> $GITHUB_ENV
+         elif ["$RUNNER_OS" == "Windows"]; then
+              echo "BIN_NAME=nightly-windows" >> $GITHUB_ENV
+         else 
+              echo "$RUNNER_OS not supported"
+              exit 1
+         fi
+         echo ">> Will retrieve $BIN_NAME artifact"
     - name: Last Nightly run
       id: get-artifact
       env:
@@ -33,7 +42,7 @@ runs:
       run: | 
         res=$(curl -H "Authorization: token $GH_TOKEN" $GITHUB_API_URL/repos/jgm/pandoc/actions/workflows/nightly.yml/runs?status="success")
         output=$(echo $res | jq -r '.workflow_runs | .[0] | {sha: .head_sha, runs_url: .html_url, artifacts: .artifacts_url, date: .updated_at}')
-        artifact_id=$(curl -H "Authorization: token $GH_TOKEN" $(echo $output | jq -r .artifacts) | jq -r '.artifacts | map(select(.name == "nightly-${{ inputs.os }}")) | .[0].id')
+        artifact_id=$(curl -H "Authorization: token $GH_TOKEN" $(echo $output | jq -r .artifacts) | jq -r '.artifacts | map(select(.name == env.BIN_NAME)) | .[0].id')
         download_url=$GITHUB_API_URL/repos/jgm/pandoc/actions/artifacts/$artifact_id/zip
         echo "::set-output name=artifact::$(echo $download_url)"
         echo "::set-output name=run-url::$(echo $output | jq '.runs_url')"
