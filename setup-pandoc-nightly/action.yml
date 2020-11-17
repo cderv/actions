@@ -35,6 +35,7 @@ runs:
               exit 1
          fi
          echo ">> Will retrieve $BIN_NAME artifact"
+      shell: bash
     - name: Last Nightly run
       id: get-artifact
       env:
