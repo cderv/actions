@@ -55,7 +55,7 @@ runs:
         echo "::set-output name=commit::$(echo $output | jq '.sha')"
         echo "::set-output name=when::$(echo $output | jq '.date')"
       shell: bash
-    - name: Download and unoszip Pandoc
+    - name: Download and unzip Pandoc
       env:
         GH_TOKEN: ${{ github.token }}
       run: |
