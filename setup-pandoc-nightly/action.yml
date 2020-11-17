@@ -4,7 +4,7 @@ inputs:
   directory:  # id of input
     description: 'where to install'
     required: true
-    default: ${{ runner.temp }}/bin
+    default: $RUNNER_TEMP/bin
   
 outputs:
   pandoc-version: 
