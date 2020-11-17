@@ -62,7 +62,7 @@ runs:
         echo ${{ steps.get-artifact.outputs.artifact }}
         curl -L -o pandoc.zip -H "Authorization: token $GH_TOKEN" ${{ steps.get-artifact.outputs.artifact }}
         unzip -j -d ${{ inputs.directory }} pandoc.zip
-        [ ${{ runner.os }} = "linux" ] && chmod +x ${{ inputs.directory }}/pandoc
+        [ ${{ runner.os }} = "Linux" ] && chmod +x ${{ inputs.directory }}/pandoc
         ${{ inputs.directory }}/pandoc --version
         echo ${{ inputs.directory }} >> $GITHUB_PATH
         ls ${{ inputs.directory }}
