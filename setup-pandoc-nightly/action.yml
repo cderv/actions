@@ -1,15 +1,12 @@
 name: 'Setup Pandoc Nightly'
 description: 'Install last dev Pandoc version built'
 inputs:
-  directory:  # id of input
-    description: 'where to install'
+  directory:
+    description: 'where to install pandoc binary. This path will be added to PATH.'
     required: true
     default: $RUNNER_TEMP/bin
   
 outputs:
-  pandoc-version: 
-    description: "Pandoc Version"
-    value: ${{ steps.pandoc-version.outputs.version }}
   commit: 
     description: "Built from this commit"
     value: ${{ steps.get-artifact.outputs.commit }}
@@ -39,13 +36,13 @@ runs:
               exit 1
               ;;
         esac
-        echo ">> Will retrieve $BIN_NAME artifact"
       shell: bash
     - name: Last Nightly run
       id: get-artifact
       env:
         GH_TOKEN: ${{ github.token }}
       run: | 
+        echo ">> Will retrieve $BIN_NAME artifact"
         res=$(curl -H "Authorization: token $GH_TOKEN" $GITHUB_API_URL/repos/jgm/pandoc/actions/workflows/nightly.yml/runs?status="success")
         output=$(echo $res | jq -r '.workflow_runs | .[0] | {sha: .head_sha, runs_url: .html_url, artifacts: .artifacts_url, date: .updated_at}')
         artifact_id=$(curl -H "Authorization: token $GH_TOKEN" $(echo $output | jq -r .artifacts) | jq -r '.artifacts | map(select(.name == env.BIN_NAME)) | .[0].id')
@@ -59,12 +56,13 @@ runs:
       env:
         GH_TOKEN: ${{ github.token }}
       run: |
-        echo ${{ steps.get-artifact.outputs.artifact }}
+        echo ">> Will get artifact from this run ${{ steps.get-artifact.outputs.run-url }}
         curl -L -o pandoc.zip -H "Authorization: token $GH_TOKEN" ${{ steps.get-artifact.outputs.artifact }}
         mkdir -p ${{ inputs.directory }}
         unzip -j -d ${{ inputs.directory }} pandoc.zip
         [ ${{ runner.os }} != "Windows" ] && chmod +x ${{ inputs.directory }}/pandoc
+        echo ">> Pandoc version retrieve"
         ${{ inputs.directory }}/pandoc --version
         echo ${{ inputs.directory }} >> $GITHUB_PATH
-        ls ${{ inputs.directory }}
+        echo ">> Pandoc is available in ${{ inputs.directory }} which has been added to PATH"
       shell: bash
