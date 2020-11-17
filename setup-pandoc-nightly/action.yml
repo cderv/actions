@@ -4,7 +4,7 @@ inputs:
   directory:  # id of input
     description: 'where to install'
     required: true
-    default: $GITHUB_WORKSPACE/bin
+    default: ${{ runner.temp }}/bin
   
 outputs:
   pandoc-version: 
