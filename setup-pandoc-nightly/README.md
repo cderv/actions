@@ -35,7 +35,7 @@ jobs:
       matrix:
         config:
           - {os: ubuntu-20.04,   pandoc: '2.11',    r: 'release', rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest"}
-          - {os: ubuntu-20.04,   pandoc: 'devel',    r: 'release', rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest"}
+          - {os: ubuntu-20.04,   pandoc: 'devel',   r: 'release', rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest"}
     env: 
       RSPM: ${{ matrix.config.rspm }}
     steps:
