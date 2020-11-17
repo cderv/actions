@@ -24,17 +24,22 @@ runs:
   steps: 
     - name: Select binary for OS
       run: |
-         if ["$RUNNER_OS" == "Linux"]; then
+        case $RUNNER_OS in 
+          "Linux")
               echo "BIN_NAME=nightly-linux" >> $GITHUB_ENV
-         elif ["$RUNNER_OS" == "macOS"]; then
+              ;;
+           "macOS")
               echo "BIN_NAME=nightly-macos" >> $GITHUB_ENV
-         elif ["$RUNNER_OS" == "Windows"]; then
+              ;;
+           "Windows")
               echo "BIN_NAME=nightly-windows" >> $GITHUB_ENV
-         else 
+              ;;
+            *)
               echo "$RUNNER_OS not supported"
               exit 1
-         fi
-         echo ">> Will retrieve $BIN_NAME artifact"
+              ;;
+        esac
+        echo ">> Will retrieve $BIN_NAME artifact"
       shell: bash
     - name: Last Nightly run
       id: get-artifact
