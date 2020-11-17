@@ -61,8 +61,8 @@ runs:
         mkdir -p ${{ inputs.directory }}
         unzip -j -d ${{ inputs.directory }} pandoc.zip
         [ ${{ runner.os }} != "Windows" ] && chmod +x ${{ inputs.directory }}/pandoc
-        echo ">> Pandoc version retrieve"
+        echo ">> Pandoc version retrieved"
         ${{ inputs.directory }}/pandoc --version
         echo ${{ inputs.directory }} >> $GITHUB_PATH
-        echo ">> Pandoc is available in ${{ inputs.directory }} which has been added to PATH"
+        echo ">> pandoc binary should be available in PATH"
       shell: bash
