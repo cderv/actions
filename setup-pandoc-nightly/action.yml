@@ -56,7 +56,7 @@ runs:
       env:
         GH_TOKEN: ${{ github.token }}
       run: |
-        echo ">> Will get artifact from this run ${{ steps.get-artifact.outputs.run-url }}
+        echo ">> Will get artifact from this run ${{ steps.get-artifact.outputs.run-url }}"
         curl -L -o pandoc.zip -H "Authorization: token $GH_TOKEN" ${{ steps.get-artifact.outputs.artifact }}
         mkdir -p ${{ inputs.directory }}
         unzip -j -d ${{ inputs.directory }} pandoc.zip
