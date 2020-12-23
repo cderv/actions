@@ -35,8 +35,6 @@ runs:
       run: | 
         echo ">> Will retrieve artifact for $RUNNER_OS"
         res=$(curl -H "Authorization: token $GH_TOKEN" $GITHUB_API_URL/repos/yihui/tinytex-releases/releases/latest)
-        output=$(echo $res | jq -r '.workflow_runs | .[0] | {sha: .head_sha, runs_url: .html_url, artifacts: .artifacts_url, date: .updated_at}')
-        artifact_id=$(curl -H "Authorization: token $GH_TOKEN" $(echo $output | jq -r .artifacts) | jq -r '.artifacts | map(select(.name == env.BIN_NAME)) | .[0].id')
         download_url=$(echo $res | jq -r '.assets[] | select(.browser_download_url | test(env.RELEASE_REG)) | .browser_download_url')
         echo "::set-output name=release::$(echo $download_url)"
       shell: bash
