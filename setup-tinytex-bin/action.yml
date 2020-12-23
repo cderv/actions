@@ -45,10 +45,12 @@ runs:
         curl -L -o $bundle ${{ steps.get-release.outputs.release }}
         mkdir -p ${{ inputs.directory }}
         echo ">> install in ${{ inputs.directory }}"
-        [ ${{ runner.os }} == "Windows" ] && 7z e $bundle -o${{ inputs.directory }}
+        [ ${{ runner.os }} == "Windows" ] && 7z x $bundle -o${{ inputs.directory }}
         [ ${{ runner.os }} != "Windows" ] && tar -C ${{ inputs.directory }} -xvzf $bundle 
         ls ${{ inputs.directory }}
-        [ ${{ runner.os }} != "Windows" ] && echo "${{ inputs.directory }}/TinyTeX/bin/" >> $GITHUB_PATH
+        echo ">> Adding to PATH"
+        [ ${{ runner.os }} == "Linux" ] && echo "${{ inputs.directory }}/.TinyTeX/bin/" >> $GITHUB_PATH
+        [ ${{ runner.os }} == "macOS" ] && echo "${{ inputs.directory }}/TinyTeX/bin/" >> $GITHUB_PATH
         [ ${{ runner.os }} == "Windows" ] && echo "${{ inputs.directory }}/TinyTeX/bin/win32/" >> $GITHUB_PATH
       shell: bash
     - name: TinyTeX version
