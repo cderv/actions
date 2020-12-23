@@ -46,7 +46,7 @@ runs:
         mkdir -p ${{ inputs.directory }}
         echo ">> install in ${{ inputs.directory }}"
         [ ${{ runner.os }} == "Windows" ] && 7z x $bundle -o${{ inputs.directory }}
-        [ ${{ runner.os }} != "Windows" ] && tar -C ${{ inputs.directory }} -xvzpf $bundle 
+        [ ${{ runner.os }} != "Windows" ] && tar -C ${{ inputs.directory }} -xzpf $bundle 
         ls ${{ inputs.directory }}
         echo ">> Adding to PATH"
         case $RUNNER_OS in
@@ -71,5 +71,5 @@ runs:
     - name: TinyTeX version
       run: |
         echo ">> tlmgr installed"
-        echo $PATH
+        tlmgr --version
       shell: bash
