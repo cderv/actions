@@ -49,5 +49,6 @@ runs:
         [ ${{ runner.os }} == "Windows" ] && echo "${{ inputs.directory }}/TinyTeX/bin/win32/" >> GITHUB_PATH
       shell: bash
     - name: TinyTeX version
-      run: tlmgr --version
+      run: |
+        ls ${{ inputs.directory }}
       shell: bash
