@@ -52,9 +52,7 @@ runs:
         case $RUNNER_OS in
           "Linux")
               cd ${{ inputs.directory }}/.TinyTeX/bin/*/
-              ls -l ./tlmgr 
-              ./tlmgr option sys_bin ~/bin
-              ./tlgmr path add
+              ./tlmgr path add
               ;;
            "macOS")
               cd ${{ inputs.directory }}/TinyTeX/bin/*/
