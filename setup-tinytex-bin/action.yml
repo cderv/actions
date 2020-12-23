@@ -36,6 +36,7 @@ runs:
         echo ">> Will retrieve artifact for $RUNNER_OS"
         res=$(curl -H "Authorization: token $GH_TOKEN" $GITHUB_API_URL/repos/yihui/tinytex-releases/releases/latest)
         download_url=$(echo $res | jq -r '.assets[] | select(.browser_download_url | test(env.RELEASE_REG)) | .browser_download_url')
+        echo $download_url
         echo "::set-output name=release::$(echo $download_url)"
       shell: bash
     - name: Download and install TinyTeX
