@@ -35,18 +35,14 @@ runs:
         echo ">> Will retrieve artifact for $RUNNER_OS"
         res=$(curl -H "Authorization: token $GH_TOKEN" $GITHUB_API_URL/repos/yihui/tinytex-releases/releases/latest)
         export RELEASE_REG=TinyTeX-v.*[.]$RELEASE_EXT$
-        echo $RELEASE_REG
         download_url=$(echo $res | jq -r '.assets[] | select(.browser_download_url | test(env.RELEASE_REG)) | .browser_download_url')
-        echo "download url"
-        echo $download_url
         echo "::set-output name=release::$(echo $download_url)"
       shell: bash
     - name: Download and install TinyTeX
       run: |
-        echo ">> Will get the release"
-        echo ">> ${{ steps.get-release.outputs.release }}"
+        echo ">> Will get the release $(basename ${{ steps.get-release.outputs.release }})"
         bundle=tinytex.$RELEASE_EXT
-        curl -L -o $bundle ${{ steps.get-release.outputs.release }}
+        curl -L -o$bundle ${{ steps.get-release.outputs.release }}
         mkdir -p ${{ inputs.directory }}
         7z x $bundle -o ${{ inputs.directory }}
         [ ${{ runner.os }} != "Windows" ] && echo "${{ inputs.directory }}/TinyTeX/bin/" >> GITHUB_PATH
