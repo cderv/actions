@@ -51,5 +51,5 @@ runs:
     - name: TinyTeX version
       run: |
         echo ">> tlmgr installed"
-        tlmgr --version
+        echo $PATH
       shell: bash
