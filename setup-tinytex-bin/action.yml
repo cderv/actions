@@ -46,13 +46,13 @@ runs:
         mkdir -p ${{ inputs.directory }}
         echo ">> install in ${{ inputs.directory }}"
         [ ${{ runner.os }} == "Windows" ] && 7z x $bundle -o${{ inputs.directory }}
-        [ ${{ runner.os }} != "Windows" ] && tar -C ${{ inputs.directory }} -xvzf $bundle 
+        [ ${{ runner.os }} != "Windows" ] && tar -C ${{ inputs.directory }} -xvzpf $bundle 
         ls ${{ inputs.directory }}
         echo ">> Adding to PATH"
         [ ${{ runner.os }} == "Linux" ] && echo "${{ inputs.directory }}/.TinyTeX/bin" >> $GITHUB_PATH
         [ ${{ runner.os }} == "macOS" ] && echo "${{ inputs.directory }}/TinyTeX/bin" >> $GITHUB_PATH
         [ ${{ runner.os }} == "Windows" ] && echo "${{ inputs.directory }}/TinyTeX/bin/win32/" >> $GITHUB_PATH
-        echo ">> TinyTeX installed"
+        echo ">> TinyTeX install"
       shell: bash
     - name: TinyTeX version
       run: |
