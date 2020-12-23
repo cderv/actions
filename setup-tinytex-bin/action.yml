@@ -44,8 +44,8 @@ runs:
         bundle=tinytex.$RELEASE_EXT
         curl -L -o $bundle ${{ steps.get-release.outputs.release }}
         mkdir -p ${{ inputs.directory }}
-        [ ${{ runner.os }} == "Windows" ] && unzip -d ${{ inputs.directory }} $bundle
-        [ ${{ runner.os }} != "Windows" ] && tar -xzf $bundle ${{ inputs.directory }}
+        [ ${{ runner.os }} == "Windows" ] && unzip -v -d ${{ inputs.directory }} $bundle
+        [ ${{ runner.os }} != "Windows" ] && tar -xvzf $bundle ${{ inputs.directory }}
         ls ${{ inputs.directory }}
         [ ${{ runner.os }} != "Windows" ] && echo "${{ inputs.directory }}/TinyTeX/bin/" >> $GITHUB_PATH
         [ ${{ runner.os }} == "Windows" ] && echo "${{ inputs.directory }}/TinyTeX/bin/win32/" >> $GITHUB_PATH
