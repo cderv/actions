@@ -42,7 +42,7 @@ runs:
       run: |
         echo ">> Will get the release "
         bundle=tinytex.$RELEASE_EXT
-        curl -L -o $bundle ${{ steps.get-artifact.outputs.release }}
+        curl -L -o $bundle ${{ steps.get-release.outputs.release }}
         mkdir -p ${{ inputs.directory }}
         7z x $bundle -o ${{ inputs.directory }}
         [ ${{ runner.os }} != "Windows" ] && echo "${{ inputs.directory }}/TinyTeX/bin/" >> GITHUB_PATH
