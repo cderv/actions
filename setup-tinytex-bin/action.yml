@@ -61,6 +61,7 @@ runs:
            "Windows")
               ls -l ${{ inputs.directory }}/TinyTeX/bin/win32
               ${{ inputs.directory }}\TinyTeX\bin\win32\tlmgr path add
+              echo "${{ inputs.directory }}\TinyTeX\bin\win32" >> $GITHUB_PATH
               ;;
             *)
               echo "$RUNNER_OS not supported"
@@ -72,6 +73,6 @@ runs:
     - name: TinyTeX version
       run: |
         echo ">> tlmgr installed"
-        echo $PATH
-        tlmgr --version
+        [ ${{ runner.os }} == "Windows" ] && tlmgr.bat --version
+        [ ${{ runner.os }} != "Windows" ] && tlmgr --version 
       shell: bash
