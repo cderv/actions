@@ -60,8 +60,7 @@ runs:
               ;;
            "Windows")
               ls -l ${{ inputs.directory }}/TinyTeX/bin/win32
-              ${{ inputs.directory }}/TinyTeX/bin/win32:tlmgr path add
-              echo "${{ inputs.directory }}/TinyTeX/bin/win32" >> $GITHUB_PATH
+              ${{ inputs.directory }}/TinyTeX/bin/win32/tlmgr.bat path add
               ;;
             *)
               echo "$RUNNER_OS not supported"
