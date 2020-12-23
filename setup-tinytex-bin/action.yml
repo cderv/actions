@@ -40,7 +40,8 @@ runs:
       shell: bash
     - name: Download and install TinyTeX
       run: |
-        echo ">> Will get the release "
+        echo ">> Will get the release"
+        echo ">> ${{ steps.get-release.outputs.release }}"
         bundle=tinytex.$RELEASE_EXT
         curl -L -o $bundle ${{ steps.get-release.outputs.release }}
         mkdir -p ${{ inputs.directory }}
