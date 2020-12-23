@@ -59,8 +59,7 @@ runs:
               ./tlmgr path add
               ;;
            "Windows")
-              cd ${{ inputs.directory }}/TinyTeX/bin/*/
-              ./tlmgr path add
+              ${{ inputs.directory }}/TinyTeX/bin/win32/tlmgr path add
               ;;
             *)
               echo "$RUNNER_OS not supported"
