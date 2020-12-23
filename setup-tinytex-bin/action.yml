@@ -49,10 +49,24 @@ runs:
         [ ${{ runner.os }} != "Windows" ] && tar -C ${{ inputs.directory }} -xvzpf $bundle 
         ls ${{ inputs.directory }}
         echo ">> Adding to PATH"
-        [ ${{ runner.os }} == "Linux" ] && ${{ inputs.directory }}/.TinyTeX/bin/tlmgr path add
-        [ ${{ runner.os }} == "macOS" ] && ${{ inputs.directory }}/TinyTeX/bin/tlmgr path add
-        [ ${{ runner.os }} == "Windows" ] && echo "${{ inputs.directory }}/TinyTeX/bin/win32/" >> $GITHUB_PATH
-        echo ">> TinyTeX install"
+        case $RUNNER_OS in
+          "Linux")
+              cd ${{ inputs.directory }}/.TinyTeX/bin/*/
+              ./tlgmr path add
+              ;;
+           "macOS")
+              cd ${{ inputs.directory }}/TinyTeX/bin/*/
+              ./tlmgr path add
+              ;;
+           "Windows")
+              echo "${{ inputs.directory }}/TinyTeX/bin/win32/" >> $GITHUB_PATH
+              ;;
+            *)
+              echo "$RUNNER_OS not supported"
+              exit 1
+              ;;
+        esac
+        echo ">> TinyTeX installed"
       shell: bash
     - name: TinyTeX version
       run: |
