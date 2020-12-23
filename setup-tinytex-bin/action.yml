@@ -52,7 +52,7 @@ runs:
         [ ${{ runner.os }} == "Linux" ] && echo "${{ inputs.directory }}/.TinyTeX/bin" >> $GITHUB_PATH
         [ ${{ runner.os }} == "macOS" ] && echo "${{ inputs.directory }}/TinyTeX/bin" >> $GITHUB_PATH
         [ ${{ runner.os }} == "Windows" ] && echo "${{ inputs.directory }}/TinyTeX/bin/win32/" >> $GITHUB_PATH
-        echo ">> TinyTeX install"
+        echo ">> TinyTeX installed"
       shell: bash
     - name: TinyTeX version
       run: |
