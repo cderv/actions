@@ -45,10 +45,11 @@ runs:
         curl -L -o $bundle ${{ steps.get-release.outputs.release }}
         mkdir -p ${{ inputs.directory }}
         7z x $bundle -o${{ inputs.directory }}
-        [ ${{ runner.os }} != "Windows" ] && echo "${{ inputs.directory }}/TinyTeX/bin/" >> GITHUB_PATH
-        [ ${{ runner.os }} == "Windows" ] && echo "${{ inputs.directory }}/TinyTeX/bin/win32/" >> GITHUB_PATH
+        [ ${{ runner.os }} != "Windows" ] && echo "${{ inputs.directory }}/TinyTeX/bin/" >> $GITHUB_PATH
+        [ ${{ runner.os }} == "Windows" ] && echo "${{ inputs.directory }}/TinyTeX/bin/win32/" >> $GITHUB_PATH
       shell: bash
     - name: TinyTeX version
       run: |
-        ls ${{ inputs.directory }}
+        echo ">> tlmgr installed"
+        tlmgr --version
       shell: bash
