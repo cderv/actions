@@ -1,0 +1,55 @@
+name: 'Setup TinyTeX'
+description: 'Install release of TinyTeX'
+inputs:
+  directory:
+    description: 'where to install TinyTeX. This path will be added to PATH.'
+    required: true
+    default: $RUNNER_TEMP/bin
+  
+runs:
+  using: "composite"
+  steps: 
+    - name: Select binary for OS
+      run: |
+        case $RUNNER_OS in 
+          "Linux")
+              echo "RELEASE_EXT=tar.gz" >> $GITHUB_ENV
+              ;;
+           "macOS")
+              echo "RELEASE_EXT=tgz" >> $GITHUB_ENV
+              ;;
+           "Windows")
+              echo "RELEASE_EXT=zip" >> $GITHUB_ENV
+              ;;
+            *)
+              echo "$RUNNER_OS not supported"
+              exit 1
+              ;;
+        esac
+        echo "RELEASE_REG=TinyTeX-v.*[.]$RELEASE_EXT$ >> $GITHUB_ENV
+      shell: bash
+    - name: Last release
+      id: get-release
+      env:
+        GH_TOKEN: ${{ github.token }}
+      run: | 
+        echo ">> Will retrieve artifact for $RUNNER_OS"
+        res=$(curl -H "Authorization: token $GH_TOKEN" $GITHUB_API_URL/repos/yihui/tinytex-releases/releases/latest)
+        output=$(echo $res | jq -r '.workflow_runs | .[0] | {sha: .head_sha, runs_url: .html_url, artifacts: .artifacts_url, date: .updated_at}')
+        artifact_id=$(curl -H "Authorization: token $GH_TOKEN" $(echo $output | jq -r .artifacts) | jq -r '.artifacts | map(select(.name == env.BIN_NAME)) | .[0].id')
+        download_url=$(echo $res | jq -r '.assets[] | select(.browser_download_url | test(env.RELEASE_REG)) | .browser_download_url')
+        echo "::set-output name=release::$(echo $download_url)"
+      shell: bash
+    - name: Download and install TinyTeX
+      run: |
+        echo ">> Will get the release "
+        bundle=tinytex.$RELEASE_EXT
+        curl -L -o $bundle ${{ steps.get-artifact.outputs.release }}
+        mkdir -p ${{ inputs.directory }}
+        7z x $bundle -o ${{ inputs.directory }}
+        [ ${{ runner.os }} != "Windows" ] && echo "${{ inputs.directory }}/TinyTeX/bin/" >> GITHUB_PATH
+        [ ${{ runner.os }} == "Windows" ] && echo "${{ inputs.directory }}/TinyTeX/bin/win32/" >> GITHUB_PATH
+      shell: bash
+    - name: TinyTeX version
+      run: tlmgr --version
+      shell: bash
