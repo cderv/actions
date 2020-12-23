@@ -26,7 +26,7 @@ runs:
               exit 1
               ;;
         esac
-        echo "RELEASE_REG=TinyTeX-v.*[.]$RELEASE_EXT$ >> $GITHUB_ENV
+        echo "RELEASE_REG=TinyTeX-v.*[.]$RELEASE_EXT$" >> $GITHUB_ENV
       shell: bash
     - name: Last release
       id: get-release
