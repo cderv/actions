@@ -37,6 +37,7 @@ runs:
         res=$(curl -H "Authorization: token $GH_TOKEN" $GITHUB_API_URL/repos/yihui/tinytex-releases/releases/latest)
         echo "res" 
         echo $res
+        echo $RELEASE_REG
         download_url=$(echo $res | jq -r '.assets[] | select(.browser_download_url | test(env.RELEASE_REG)) | .browser_download_url')
         echo "download url"
         echo $download_url
