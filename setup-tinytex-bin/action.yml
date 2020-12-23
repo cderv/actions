@@ -9,7 +9,7 @@ inputs:
 runs:
   using: "composite"
   steps: 
-    - name: Select binary for OS
+    - name: Select extension according to OS
       run: |
         case $RUNNER_OS in 
           "Linux")
@@ -26,7 +26,6 @@ runs:
               exit 1
               ;;
         esac
-        echo "RELEASE_REG=TinyTeX-v.*[.]$RELEASE_EXT$" >> $GITHUB_ENV
       shell: bash
     - name: Last release
       id: get-release
@@ -35,8 +34,7 @@ runs:
       run: | 
         echo ">> Will retrieve artifact for $RUNNER_OS"
         res=$(curl -H "Authorization: token $GH_TOKEN" $GITHUB_API_URL/repos/yihui/tinytex-releases/releases/latest)
-        echo "res" 
-        echo $res
+        export RELEASE_REG=TinyTeX-v.*[.]$RELEASE_EXT$
         echo $RELEASE_REG
         download_url=$(echo $res | jq -r '.assets[] | select(.browser_download_url | test(env.RELEASE_REG)) | .browser_download_url')
         echo "download url"
