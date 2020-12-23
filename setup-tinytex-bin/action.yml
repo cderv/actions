@@ -46,7 +46,7 @@ runs:
         mkdir -p ${{ inputs.directory }}
         echo ">> install in ${{ inputs.directory }}"
         [ ${{ runner.os }} == "Windows" ] && 7z e $bundle -o${{ inputs.directory }}
-        [ ${{ runner.os }} != "Windows" ] && tar xzf $bundle -C ${{ inputs.directory }}
+        [ ${{ runner.os }} != "Windows" ] && tar -C ${{ inputs.directory }} -xvzf $bundle 
         ls ${{ inputs.directory }}
         [ ${{ runner.os }} != "Windows" ] && echo "${{ inputs.directory }}/TinyTeX/bin/" >> $GITHUB_PATH
         [ ${{ runner.os }} == "Windows" ] && echo "${{ inputs.directory }}/TinyTeX/bin/win32/" >> $GITHUB_PATH
