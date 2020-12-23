@@ -73,6 +73,12 @@ runs:
     - name: TinyTeX version
       run: |
         echo ">> tlmgr installed"
-        [ ${{ runner.os }} == "Windows" ] && tlmgr.bat --version
-        [ ${{ runner.os }} != "Windows" ] && tlmgr --version 
+        case $RUNNER_OS in
+          "Windows")
+              tlmgr.bat --version
+              ;;
+           *)
+              tlmgr --version
+              ;;
+        esac
       shell: bash
