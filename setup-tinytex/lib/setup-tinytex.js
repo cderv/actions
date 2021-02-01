@@ -106,7 +106,7 @@ function installTinyTeXPosix() {
 function installTinyTeXWindows() {
     return __awaiter(this, void 0, void 0, function* () {
         const fileName = "install-windows.bat";
-        const downloadUrl = "https://yihui.name/gh/tinytex/tools/install-bin-windows.bat";
+        const downloadUrl = "https://raw.githubusercontent.com/yihui/tinytex/new-pwsh-download-method/tools/install-bin-windows.bat";
         let downloadPath = null;
         try {
             downloadPath = yield tc.downloadTool(downloadUrl);
